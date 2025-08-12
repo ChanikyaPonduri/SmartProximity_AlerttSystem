@@ -24,4 +24,4 @@ def distance_view(request):
             context['distance'] = round(distance, 2)
         except:
             context['error'] = 'Invalid input. Please enter valid coordinates.'
-    return render(request, 'distance.html', context)
+    return render(request, 'index.html', context)

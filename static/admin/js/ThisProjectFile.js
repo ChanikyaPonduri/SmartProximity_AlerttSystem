@@ -76,6 +76,7 @@ function startTracking() {
             document.getElementById("distance").textContent =
                 `Distance to destination: ${distance} km`;
 
+            // Trigger alarm if within radius
             if (distance <= radius && !alarmPlayed) {
                 alarm.play();
                 alarmPlayed = true;
@@ -85,6 +86,21 @@ function startTracking() {
                 navigator.geolocation.clearWatch(watcherId);
                 watcherId = null;
             }
+
+            // === Visual Box Update Using Displayed Distance ===
+            const visualBox = document.getElementById("visualHeightBox");
+            const distanceText = document.getElementById("distanceText");
+
+            const displayedDistanceText = document.getElementById("distance").textContent;
+            const match = displayedDistanceText.match(/([\d.]+)\s*km/);
+            const currentKm = match ? parseFloat(match[1]) : 0;
+
+            const maxDistance = 10; // km = full height (200px)
+            const percent = Math.min(currentKm / maxDistance, 1);
+            const heightPx = 200 * percent;
+
+            visualBox.style.height = `${heightPx}px`;
+            distanceText.textContent = `${Math.round(currentKm)} km`;
 
         }, () => {
             document.getElementById("status").textContent = "Unable to access your location.";
